@@ -18,10 +18,13 @@ interface Product {
   description: string;
   features: string[];
   brand: string;
-  sizes?: string[];
-  colors?: string[];
-  stock?: number;
-  reviews?: number;
+}
+
+interface EnhancedProduct extends Product {
+  sizes: string[];
+  colors: string[];
+  stock: number;
+  reviews: number;
 }
 
 interface ProductPageProps {
@@ -33,7 +36,7 @@ interface ProductPageProps {
 export default function ProductPage({ params }: ProductPageProps) {
   const { id } = use(params);
   const { addToCart } = useCart();
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<EnhancedProduct | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
@@ -42,13 +45,14 @@ export default function ProductPage({ params }: ProductPageProps) {
   useEffect(() => {
     const foundProduct = allProducts.find(p => p.id === parseInt(id));
     if (foundProduct) {
-      setProduct({
+      const enhancedProduct: EnhancedProduct = {
         ...foundProduct,
-        sizes: foundProduct.sizes || ['Default'],
-        colors: foundProduct.colors || ['#000000'],
-        stock: foundProduct.stock || 10,
-        reviews: foundProduct.reviews || 0
-      });
+        sizes: ['Default'],
+        colors: ['#000000'],
+        stock: 10,
+        reviews: 0
+      };
+      setProduct(enhancedProduct);
     }
   }, [id]);
 
