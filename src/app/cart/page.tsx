@@ -7,12 +7,13 @@ import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 
 export default function CartPage() {
-  const { cartItems, updateQuantity, removeFromCart, cartTotal } = useCart();
+  
+  const { cartItems, updateQuantity, removeFromCart, total } = useCart();
   const router = useRouter();
 
   const shipping = 10;
-  const tax = (cartTotal || 0) * 0.1;
-  const total = (cartTotal || 0) + shipping + tax;
+  const tax = (total || 0) * 0.1;
+  const total_amount = (total || 0) + shipping + tax;
 
   if (!cartItems || cartItems.length === 0) {
     return (
@@ -126,7 +127,7 @@ export default function CartPage() {
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>
                   <span className="text-gray-900">
-                    ${(cartTotal || 0).toLocaleString()}
+                    ${(total || 0).toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -145,7 +146,7 @@ export default function CartPage() {
                       Total
                     </span>
                     <span className="text-lg font-medium text-gray-900">
-                      ${total.toLocaleString()}
+                      ${total_amount.toLocaleString()}
                     </span>
                   </div>
                 </div>
