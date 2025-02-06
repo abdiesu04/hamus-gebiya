@@ -8,6 +8,22 @@ import { FiShoppingCart, FiHeart, FiShare2, FiStar, FiMinus, FiPlus } from 'reac
 import { allProducts } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  rating: number;
+  image: string;
+  category: string;
+  description: string;
+  features: string[];
+  brand: string;
+  sizes?: string[];
+  colors?: string[];
+  stock?: number;
+  reviews?: number;
+}
+
 interface ProductPageProps {
   params: Promise<{
     id: string;
@@ -17,7 +33,7 @@ interface ProductPageProps {
 export default function ProductPage({ params }: ProductPageProps) {
   const { id } = use(params);
   const { addToCart } = useCart();
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
@@ -26,12 +42,8 @@ export default function ProductPage({ params }: ProductPageProps) {
   useEffect(() => {
     const foundProduct = allProducts.find(p => p.id === parseInt(id));
     if (foundProduct) {
-      // Create an array of images, using the main image if no additional images exist
-      const productImages = foundProduct.images || [foundProduct.image];
-      
       setProduct({
         ...foundProduct,
-        images: productImages,
         sizes: foundProduct.sizes || ['Default'],
         colors: foundProduct.colors || ['#000000'],
         stock: foundProduct.stock || 10,
@@ -58,10 +70,6 @@ export default function ProductPage({ params }: ProductPageProps) {
     addToCart(cartItem);
   };
 
-  // Ensure we have a valid images array
-  const productImages = product.images || [product.image];
-  const currentImage = productImages[selectedImage] || productImages[0];
-
   return (
     <div className="min-h-screen bg-white py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,31 +78,11 @@ export default function ProductPage({ params }: ProductPageProps) {
           <div className="lg:w-1/2">
             <div className="relative aspect-square rounded-xl overflow-hidden bg-white border border-gray-200">
               <Image
-                src={currentImage}
+                src={product.image}
                 alt={product.name}
                 fill
                 className="object-cover"
               />
-            </div>
-            <div className="grid grid-cols-4 gap-4 mt-4">
-              {productImages.map((image: string, index: number) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImage(index)}
-                  className={`relative aspect-square rounded-lg overflow-hidden bg-white border-2 ${
-                    selectedImage === index
-                      ? 'border-amber-500'
-                      : 'border-gray-200'
-                  }`}
-                >
-                  <Image
-                    src={image}
-                    alt={`${product.name} - Image ${index + 1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </button>
-              ))}
             </div>
           </div>
 
