@@ -4,9 +4,10 @@ const nextConfig = {
     domains: ['images.unsplash.com', 'api.dicebear.com'],
   },
   reactStrictMode: true,
-  swcMinify: true,
-  experimental: {
-    appDir: true,
+  poweredByHeader: false,
+  optimizeFonts: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
   },
 }
 
