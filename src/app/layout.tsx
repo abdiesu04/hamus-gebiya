@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "react-hot-toast";
 import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
 import FloatingCart from "@/components/FloatingCart";
 import Footer from "@/components/Footer";
 
@@ -22,15 +23,17 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-white">
       <body className={`${inter.className} bg-white`}>
-        <CartProvider>
-          <Navbar />
-          <main className="min-h-screen pt-16 bg-white">
-            {children}
-          </main>
-          <Footer />
-          <FloatingCart />
-          <Toaster position="bottom-right" />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <Navbar />
+            <main className="min-h-screen pt-16 bg-white">
+              {children}
+            </main>
+            <Footer />
+            <FloatingCart />
+            <Toaster position="bottom-right" />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );
